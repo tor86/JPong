@@ -1,5 +1,6 @@
 package gameTest;
 
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -31,6 +32,7 @@ public class main extends BasicGame
 	int scoreCom = 0;
 	int padsizex = 80;
 	int padsizey = 20;
+	int fail;
 	
 	Timer timer;
 	
@@ -41,6 +43,11 @@ public class main extends BasicGame
 	float lastframe = 0;
 	float lastframe2 = 0;
 	float lastframe3 = 0;
+	float lastframe4 = 0;
+	float lastframe5 = 0;
+	
+	boolean direction;
+	String bool = "";
 	
 	public main(String gamename)
 	{
@@ -63,6 +70,12 @@ public class main extends BasicGame
 		
 		ball = new Image("c:/development/img/ball1.png");
 		
+		pad2x = ballx;
+		
+		fail = 0;
+		
+		direction = false;
+		
 	}
 
 	@Override
@@ -73,7 +86,8 @@ public class main extends BasicGame
 		pad1x = (float) input.getMouseX();
 		pad1y = (float) input.getMouseY();
 		
-		pad2x = ballx-20;
+		// Skip this for failRate method
+		//pad2x = ballx-20;
 		
 		
 		
@@ -170,8 +184,10 @@ public class main extends BasicGame
 		    ballx=width/2;
 		    bally=height/2;
 		    yspeed = yspeed * -1;
-		    delay(1200);
+		    //delay(1200);
 		  }
+		  
+		  failRate();
 		  
 	}
 	
@@ -187,6 +203,61 @@ public class main extends BasicGame
 		ballx = ballx + xspeed;
 		bally = bally + yspeed;
 		
+	}
+	
+	private void failRate() {
+		//int fail = 0;
+		
+		int specter = width/5;
+		
+		float elapsed4 = timer.getTime() - lastframe4;
+//		lastframe = timer.getTime();
+		
+//		for (int i=0;i<specter;i++) {
+//			if (elapsed4 >= 0.11) {
+//			    pad2x = ballx - (float)specter;
+//			    lastframe4 = timer.getTime();
+//			}
+//		}
+//		
+//		while(true) {
+//			if (elapsed4 >= 0.11) {
+//				pad2x = ballx - 5;
+//				lastframe = timer.getTime();
+//			}
+//			break;
+//		}
+		
+		float elapsed5 = timer.getTime() - lastframe5;
+		
+		
+		
+		if (elapsed5 >= 1) {
+			Random randDirection = new Random();
+			direction = randDirection.nextBoolean();
+			lastframe5 = timer.getTime();
+		}
+		
+//		Random randDirection = new Random();
+//		Boolean direction = randDirection.nextBoolean();
+//		bool = direction.toString();
+		
+		if (elapsed4 >= 0.01) {
+			if (fail<specter&&fail>(0-specter)) {
+				if (direction)
+					fail++;
+				else
+					fail--;
+			}
+			else if (fail>specter)fail--;
+			else if (fail<(0-specter))fail++;
+			//else fail--;
+			
+			//pad2x = (ballx + (float)(fail));
+			lastframe4 = timer.getTime();
+		}
+		pad2x = (ballx + (float)(fail));
+		//pad2x = ballx - fail;
 	}
 
 	@Override
@@ -215,7 +286,7 @@ public class main extends BasicGame
 //		oneBall.setColor(Color.black);
 //		oneBall.fillOval(ballx, bally, 25, 25);
 		
-		
+		//g.drawString(bool, 400, 400);
 		
 		//g.drawString(test, 25, height-25);
 		
