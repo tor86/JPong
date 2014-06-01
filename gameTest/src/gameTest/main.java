@@ -34,7 +34,7 @@ public class main extends BasicGame
 	int padsizey = 20;
 	int fail;
 	
-	Timer timer;
+	static Timer timer;
 	
 	String test = "";
 	
@@ -208,7 +208,7 @@ public class main extends BasicGame
 	private void failRate() {
 		//int fail = 0;
 		
-		int specter = width/5;
+		int specter = width/4;
 		
 		float elapsed4 = timer.getTime() - lastframe4;
 //		lastframe = timer.getTime();
@@ -243,14 +243,14 @@ public class main extends BasicGame
 //		bool = direction.toString();
 		
 		if (elapsed4 >= 0.01) {
-			if (fail<specter&&fail>(0-specter)) {
+			//if (fail<specter&&fail>(0-specter)) {
 				if (direction)
-					fail++;
+					fail+=1;
 				else
-					fail--;
-			}
-			else if (fail>specter)fail--;
-			else if (fail<(0-specter))fail++;
+					fail-=1;
+			//}
+			if (fail>specter)fail=specter-1;
+			if (fail<(0-specter))fail=1-specter;
 			//else fail--;
 			
 			//pad2x = (ballx + (float)(fail));
@@ -285,7 +285,8 @@ public class main extends BasicGame
 		ball.draw(ballx, bally);
 //		oneBall.setColor(Color.black);
 //		oneBall.fillOval(ballx, bally, 25, 25);
-		
+		String test1 = Integer.toString(fail);
+		g.drawString(test1, 400, 400);
 		//g.drawString(bool, 400, 400);
 		
 		//g.drawString(test, 25, height-25);
@@ -301,6 +302,7 @@ public class main extends BasicGame
 			AppGameContainer appgc;
 			appgc = new AppGameContainer(new main("JPong"));
 			appgc.setDisplayMode(width, height, false);
+			appgc.setTargetFrameRate(60);
 			appgc.start();
 		}
 		catch (SlickException ex)
